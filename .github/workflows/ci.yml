@@ -41,22 +41,11 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install Railway CLI
-        run: npm i -g @railway/cli
-
-      - name: Deploy to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      - name: Verify deployment is live
         run: |
-          railway up --detach \
-            --project 11a0cdd7-f801-415d-b9f3-d33b2149efba \
-            --service cd73e9da-1ce7-46c6-9885-60f233073a11 \
-            --environment production
-
-      - name: Smoke test
-        run: |
-          sleep 45
+          echo "Checking live service at ${{ vars.PUBLIC_URL }}"
           curl -fsS "${{ vars.PUBLIC_URL }}/health"
+          echo ""
+          curl -fsS "${{ vars.PUBLIC_URL }}/ready"
+          echo ""
+          echo "Service is healthy and ready!"
