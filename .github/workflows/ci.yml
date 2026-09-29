@@ -42,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Verify deployment is live
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
           echo "Checking live service at ${{ vars.PUBLIC_URL }}"
           curl -fsS "${{ vars.PUBLIC_URL }}/health"
